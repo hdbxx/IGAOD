@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Genetic Algorithm</title>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="css/chart-styles.css" rel="stylesheet" type="text/css">
+    <style>
+
+        .cation-middle{
+
+        }
+
+        .panel-default > .panel-heading {
+            color: #000;
+            border-color: #FFF;
+            font-weight: bold;
+            background: #FFFFFF;
+            font-size: 16px;
+            padding: 0px 15px 0;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cation-content">
+        <div style="height:50px"></div>
+        <div class="cation-flex" >
+            <div class="cation-middle">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Average Fitness Chart
+                            </div>
+                            <div class="panel-body">
+                                <div id="user1" style="width: 90%;height:300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Maximum Fitness Chart
+                            </div>
+                            <div class="panel-body">
+                                <div id="userMax" style="width: 90%;height:300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                All User Average Fitness Chart
+                            </div>
+                            <div class="panel-body">
+                                <div id="allUserAverageChart" style="width: 90%;height:300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                All User Maximum Fitness Chart
+                            </div>
+                            <div class="panel-body">
+                                <div id="allUserMaxChart" style="width: 90%;height:300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Parameter
+                            </div>
+                            <div class="panel-body">
+                                <div id="app">
+                                    <ul>
+                                        <li>Selection Operator：{{ selectionOperator | selectionFilter }}</li>
+                                        <li>Crossover Operator：{{ crossoverOperator | crossoverFilter}}</li>
+                                        <li>Mutation Operator：{{ mutationOperator | mutationFilter}}</li>
+                                        <li>Encoding：{{ code | codeFilter }}</li>
+                                        <li>Population Size：{{ size }}</li>
+                                        <li>Stop Generation：{{ generation }}</li>
+                                        <li>Crossover Rate：{{ crossover }}</li>
+                                        <li>Mutation Rate：{{ mutation }}</li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="/echarts/echarts.min.js" ></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script>
+        var user1Dom = document.getElementById('user1');
+        var user1Chart = echarts.init(user1Dom);
+
+        var userMax = document.getElementById('userMax');
+        var userMaxChart = echarts.init(userMax);
+
+        var allUserAverage = document.getElementById('allUserAverageChart');
+        var allUserAverageChart = echarts.init(allUserAverage);
+
+        var allUserMax = document.getElementById('allUserMaxChart');
+        var allUserMaxChart = echarts.init(allUserMax);
+
+
+        function getData(){
+            let data = [];
+            data.push([1,2]);
+            data.push([2,3]);
+            data.push([3,4]);
+            data.push([4,8]);
+            data.push([5,8]);
+            data.push([6,8]);
+            return data;
+        }
+
+        let option=  {
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                name:'Generation',
+                max:20,
+                nameLocation:'center',
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        fontSize : 14,      //更改坐标轴文字大小
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        type: 'solid',
+
+                        width:'2'
+                    }
+                },
+                nameTextStyle:{
+                    lineHeight:30,
+                    fontSize: 18,
+
+                },
+                splitLine : {show :false}
+            },
+            yAxis: {
+                name:'Fitness',
+                nameLocation:'center',
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        fontSize : 14      //更改坐标轴文字大小
+                    }
+                },
+                max:10,
+                nameTextStyle:{
+                    lineHeight:25,
+                    fontSize: 18,
+
+                },
+                axisLine: {
+                    lineStyle: {
+                        type: 'solid',
+
+                        width:'2'
+                    }
+                },
+                splitLine : {show :false}
+            },
+            legend: {
+                right:'10%',
+                data: ['IGA-KDT','IGA-KDTGIM'],
+                top:'10%'
+            },
+            series: [{
+                name:'IGA-KDT',
+                data: getData(),
+                type: 'line',
+                symbol: 'rect',
+                symbolSize: 7,
+                lineStyle: {
+                    color: '#f15a22',
+                    width: 2,
+                    type: 'dashed'
+
+                },
+                itemStyle: {
+                    borderWidth: 0.5,
+                    borderColor: '#f15a22',
+                    color: '#f15a22',
+                    opacity:0.7
+                }
+            }
+                ,{
+                    name:'IGA-KDTGIM',
+                    data: getData(),
+                    type: 'line',
+                    symbol: 'triangle',
+                    symbolSize: 10,
+                    lineStyle: {
+                        color: '#5470C6',
+                        width: 2,
+                        type: 'solid'
+
+                    },
+                    itemStyle: {
+                        borderWidth: 0.5,
+                        borderColor: '#5470C6',
+                        color: '#5470C6',
+                        opacity:0.7
+                    }
+                }]
+        };
+
+
+        var param = {
+            "selectionOperator": "1",
+            "crossoverOperator": "3",
+            "mutationOperator": "3",
+            "code": "10",
+            "size": "4",
+            "generation": "5",
+            "crossover": "0.1",
+            "mutation": "0.1"
+        }
+        let tempParam = JSON.parse($.cookie('igaConfig'))
+        if (tempParam) {
+            param = tempParam
+        }
+
+        var newestData=[];
+        var historyData=[];
+        $.ajax({
+            url: "/newestData",
+            type: "post",
+            data: {
+                configStr: JSON.stringify(param)
+            },
+            dataType: "json",
+            success: function (data) {
+
+                newestData=data
+                avgChart(data)
+                maxChart(data)
+            }
+        });
+
+        $.ajax({
+            url: "/historyData",
+            type: "post",
+            data: {
+                configStr: JSON.stringify(param)
+            },
+            dataType: "json",
+            success: function (data) {
+                historyData=data
+                historyAvgChart(data)
+                historyMaxChart(data)
+            }
+        });
+
+        function avgChart(data){
+
+            let option1=  {
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    name:'Generation',
+                    max:data.length,
+                    nameLocation:'center',
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            fontSize : 14,      //更改坐标轴文字大小
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+
+                            width:'2'
+                        }
+                    },
+                    nameTextStyle:{
+                        lineHeight:30,
+                        fontSize: 18,
+
+                    },
+                    splitLine : {show :false}
+                },
+                yAxis: {
+                    name:'Fitness',
+                    nameLocation:'center',
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            fontSize : 14      //更改坐标轴文字大小
+                        }
+                    },
+                    max:10,
+                    nameTextStyle:{
+                        lineHeight:25,
+                        fontSize: 18,
+
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+
+                            width:'2'
+                        }
+                    },
+                    splitLine : {show :false}
+                },
+                legend: {
+                    right:'10%',
+                    data: ['My'],
+                    top:'10%'
+                },
+                series: [{
+                    name:'My',
+                    data: averageFitnessData(data),
+                    type: 'line',
+                    symbol: 'rect',
+                    symbolSize: 7,
+                    lineStyle: {
+                        color: '#f15a22',
+                        width: 2,
+                        type: 'dashed'
+
+                    },
+                    itemStyle: {
+                        borderWidth: 0.5,
+                        borderColor: '#f15a22',
+                        color: '#f15a22',
+                        opacity:0.7
+                    }
+                }
+                ]
+            };
+
+            user1Chart.setOption(option1,true);
+        }
+
+        function maxChart(data){
+
+            let option1=  {
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    name:'Generation',
+                    max:data.length,
+                    nameLocation:'center',
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            fontSize : 14,      //更改坐标轴文字大小
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+
+                            width:'2'
+                        }
+                    },
+                    nameTextStyle:{
+                        lineHeight:30,
+                        fontSize: 18,
+
+                    },
+                    splitLine : {show :false}
+                },
+                yAxis: {
+                    name:'Fitness',
+                    nameLocation:'center',
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            fontSize : 14      //更改坐标轴文字大小
+                        }
+                    },
+                    max:10,
+                    nameTextStyle:{
+                        lineHeight:25,
+                        fontSize: 18,
+
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+
+                            width:'2'
+                        }
+                    },
+                    splitLine : {show :false}
+                },
+                legend: {
+                    right:'10%',
+                    data: ['My'],
+                    top:'10%'
+                },
+                series: [{
+                    name:'My',
+                    data: maxFitnessData(data),
+                    type: 'line',
+                    symbol: 'triangle',
+                    symbolSize: 10,
+                    lineStyle: {
+                        color: '#5470C6',
+                        width: 2,
+                        type: 'solid'
+
+                    },
+                    itemStyle: {
+                        borderWidth: 0.5,
+                        borderColor: '#5470C6',
+                        color: '#5470C6',
+                        opacity:0.7
+                    }
+                }
+                ]
+            };
+
+            userMaxChart.setOption(option1,true);
+        }
+
+        function historyAvgChart(data){
+            if(data.length<1){
+                return;
+            }
+            let generation = JSON.parse(data[0]).length
+
+            let option1=  {
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    name:'Generation',
+                    max:generation,
+                    nameLocation:'center',
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            fontSize : 14,      //更改坐标轴文字大小
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+
+                            width:'2'
+                        }
+                    },
+                    nameTextStyle:{
+                        lineHeight:30,
+                        fontSize: 18,
+
+                    },
+                    splitLine : {show :false}
+                },
+                yAxis: {
+                    name:'Fitness',
+                    nameLocation:'center',
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            fontSize : 14      //更改坐标轴文字大小
+                        }
+                    },
+                    max:10,
+                    nameTextStyle:{
+                        lineHeight:25,
+                        fontSize: 18,
+
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+
+                            width:'2'
+                        }
+                    },
+                    splitLine : {show :false}
+                },
+                legend: {
+                    right:'10%',
+                    data: ['All User'],
+                    top:'10%'
+                },
+                series: [{
+                    name:'All User',
+                    data: historyAverageFitnessData(data),
+                    type: 'line',
+                    symbol: 'rect',
+                    symbolSize: 7,
+                    lineStyle: {
+                        color: '#f15a22',
+                        width: 2,
+                        type: 'dashed'
+
+                    },
+                    itemStyle: {
+                        borderWidth: 0.5,
+                        borderColor: '#f15a22',
+                        color: '#f15a22',
+                        opacity:0.7
+                    }
+                }
+                ]
+            };
+
+            allUserAverageChart.setOption(option1,true);
+        }
+
+        function historyMaxChart(data){
+
+            if(data.length<1){
+                return;
+            }
+            let generation = JSON.parse(data[0]).length
+
+            let option1=  {
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    name:'Generation',
+                    max:generation,
+                    nameLocation:'center',
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            fontSize : 14,      //更改坐标轴文字大小
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+
+                            width:'2'
+                        }
+                    },
+                    nameTextStyle:{
+                        lineHeight:30,
+                        fontSize: 18,
+
+                    },
+                    splitLine : {show :false}
+                },
+                yAxis: {
+                    name:'Fitness',
+                    nameLocation:'center',
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            fontSize : 14      //更改坐标轴文字大小
+                        }
+                    },
+                    max:10,
+                    nameTextStyle:{
+                        lineHeight:25,
+                        fontSize: 18,
+
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            type: 'solid',
+
+                            width:'2'
+                        }
+                    },
+                    splitLine : {show :false}
+                },
+                legend: {
+                    right:'10%',
+                    data: ['All User'],
+                    top:'10%'
+                },
+                series: [{
+                    name:'All User',
+                    data: historyMaxFitnessData(data),
+                    type: 'line',
+                    symbol: 'triangle',
+                    symbolSize: 10,
+                    lineStyle: {
+                        color: '#5470C6',
+                        width: 2,
+                        type: 'solid'
+
+                    },
+                    itemStyle: {
+                        borderWidth: 0.5,
+                        borderColor: '#5470C6',
+                        color: '#5470C6',
+                        opacity:0.7
+                    }
+                }
+                ]
+            };
+
+            allUserMaxChart.setOption(option1,true);
+        }
+
+        function averageFitnessData(data){
+            let arr = [];
+            for(let i=0;i<data.length;i++){
+                let avg=meanFitness(data[i])
+                arr.push([i+1,avg])
+            }
+
+            return arr;
+        }
+
+        function historyAverageFitnessData(data){
+            let arrs = [];
+            let generation;
+            for(let i=0;i<data.length;i++){
+               let userData = JSON.parse(data[i])
+                generation=userData.length
+                let arr=averageFitnessData(userData)
+                arrs.push(arr)
+            }
+
+            let arr=[];
+            for(let i=0;i<generation;i++){
+                let v=0;
+                for(let j=0;j<arrs.length;j++){
+                    v += arrs[j][i][1]
+                }
+                arr.push([i+1,v/(arrs.length)])
+            }
+            return arr;
+        }
+
+        function historyMaxFitnessData(data){
+            let arrs = [];
+
+            let generation;
+            for(let i=0;i<data.length;i++){
+                let userData = JSON.parse(data[i])
+                generation=userData.length
+                let arr=maxFitnessData(userData)
+                arrs.push(arr)
+            }
+
+            let arr=[];
+            for(let i=0;i<generation;i++){
+                let v=0;
+                for(let j=0;j<arrs.length;j++){
+                    v += arrs[j][i][1]
+                }
+                arr.push([i+1,v/(arrs.length)])
+            }
+            return arr;
+        }
+
+        function maxFitnessData(data){
+            let arr = [];
+            for(let i=0;i<data.length;i++){
+                let max=maxFitness(data[i])
+                arr.push([i+1,max])
+            }
+
+            return arr;
+        }
+
+        function meanFitness(genArr){
+            let mean=0;
+            for(let j=0 ;j < genArr.length; j++){
+                let ind=genArr[j];
+                mean += parseInt(ind.fitness);
+            }
+            mean=mean/genArr.length;
+            return mean;
+        }
+
+        function maxFitness(genArr){
+
+            let max=0;
+            for(let j=0 ;j < genArr.length; j++){
+                let ind=genArr[j];
+                let va = parseInt(ind.fitness);
+                if(va>max){
+                    max = va
+                }
+            }
+
+            return max;
+        }
+
+        Vue.filter('selectionFilter', function (value) {
+            let selectionOperatorKV = {
+                1: 'Roulette Wheel Selection',
+                2: 'Stochastic universal selection',
+                3: 'Linear Ranking Selection',
+                4: 'Tournament Selection'
+            }
+            return selectionOperatorKV[value]
+        })
+
+        Vue.filter('crossoverFilter', function (value) {
+            let crossoverOperatorKV = {
+                1: 'One-point Crossover',
+                2: 'Two-point Crossover',
+                3: 'Uniform Crossover',
+                4: 'Cycle Crossover'
+            }
+            return crossoverOperatorKV[value]
+        })
+
+        Vue.filter('mutationFilter', function (value) {
+            let mutationOperatorKV = {
+                1: 'Simple Mutation',
+                2: 'Uniform Mutation'
+            }
+            return mutationOperatorKV[value]
+        })
+
+        Vue.filter('codeFilter', function (value) {
+            let codeKV = {
+                10: 'Decimal',
+                2: 'Binary'
+            }
+            return codeKV[value]
+        })
+
+        var app = new Vue({
+            el: '#app',
+            data: param
+        })
+
+    </script>
+
+</body>
+</html>

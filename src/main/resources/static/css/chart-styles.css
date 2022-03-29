@@ -1,0 +1,224 @@
+/* 公共样式表css */
+html,body {
+    color: #333;
+    margin: 0;
+    height: 100%;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+img {
+    border: 0;
+}
+
+body {
+    background-color: #E8E8E8;
+    color: #666;
+}
+
+html, body, div, dl, dt, dd, ol, ul, li, h1, h2, h3, h4, h5, h6, p, blockquote, pre, button, fieldset, form, input, legend, textarea, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #08acee;
+}
+
+button {
+    outline: 0;
+}
+
+img {
+    border: 0;
+}
+
+button,input,optgroup,select,textarea {
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    outline: none;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    color: #666;
+    user-select: none;
+}
+
+a:hover {
+    color: #eee;
+}
+
+.clearfix::after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+
+.clearfix {
+}
+
+/* 必要布局样式css */
+.cation-content {
+    margin: 0 20px;
+    padding: 0;
+}
+
+.cation-middle {
+    line-height: 48px;
+    padding: 10px 20px 10px 30px;
+    font-size: 14px;
+}
+
+.cation-right{
+    line-height: 48px;
+    background: #fff;
+    padding: 10px 20px 10px 30px;
+    font-size: 14px;
+}
+
+.cation-list {
+    overflow: hidden;
+    margin: 15px auto;
+}
+
+.cation-list dt {
+    float: left;
+    width: 64px;
+    font-weight: 700;
+    line-height: 60px;
+    position: relative;
+    color: #333;
+}
+
+:before, :after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.cation-list dt:after {
+    content: "";
+    position: absolute;
+    right: 12px;
+    top: 31px;
+    border: 1px solid #333;
+    border-width: 0 1px 1px 0;
+    width: 4px;
+    height: 4px;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.cation-list dd {
+    border-bottom: 1px dotted #e0e0e0;
+    margin-left: 64px;
+    overflow: hidden;
+}
+
+.cation-list dd a {
+    color: #8d8d91;
+    font-size: 15px;
+    line-height: 30px;
+    height: 30px;
+    float: left;
+
+    padding: 0 18px;
+    margin: 17px 0;
+}
+
+.cation-list dd a.on, .cation-list a:hover {
+    color: #Fff;
+    background: #fc8080;
+}
+
+.cation-list dd a:last-child {
+    border-right: 0 none;
+}
+
+.cation-list:last-of-type dd {
+    border-bottom: 0 none;
+}
+
+.start{
+    padding: 0px 20px;
+    color: #666666;
+    cursor:pointer;
+}
+
+.start-container{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+.cation-flex{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+.cation-flex .cation-middle{
+    width: 100%;
+}
+
+.cation-flex .cation-right{
+    width: 20%;
+}
+
+
+.card-view{
+    width: 233px;
+    height: 233px;
+}
+
+.card-list{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 15px;
+}
+
+.card-individual{
+    margin-bottom: 20px;
+    border: 1px #ccc solid;
+}
+
+.card-fitness{
+    text-align: center;
+}
+
+.card-fitness input{
+    width: 60px;
+    padding: 0;
+    background: none;
+    text-align: center;
+    color: #222222;
+    border: 0px;
+    outline: none;
+    border-bottom: 1px #000 solid;
+    line-height: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}

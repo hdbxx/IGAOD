@@ -1,0 +1,208 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>Interactive Genetic Algorithm</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <style>
+        .other{
+            font-size: 15px;
+            line-height: 30px;
+            height: 30px;
+            margin: 17px 14px;
+            width: 50px;
+            padding: 0;
+        }
+    </style>
+</head>
+<body style="">
+<div class="cation-content">
+    <div style="height:50px"></div>
+    <div class="cation-middle">
+        <dl class="cation-list">
+            <dt>Selection Operator</dt>
+            <dd>
+                <a href="javascript:;" rel="1" name="selectionOperator" class="default ">Roulette Wheel Selection</a>
+                <a href="javascript:;" rel="2" name="selectionOperator" class="default">Stochastic universal selection</a>
+                <a href="javascript:;" rel="3" name="selectionOperator" class="default">Linear Ranking Selection</a>
+                <a href="javascript:;" rel="4" name="selectionOperator" class="default">Tournament Selection</a>
+            </dd>
+        </dl>
+        <dl class="cation-list">
+            <dt>Crossover Operator</dt>
+            <dd>
+                <a href="javascript:;" rel="1" name="crossoverOperator" class="default">One-point Crossover</a>
+                <a href="javascript:;" rel="2" name="crossoverOperator" class="default">Two-point Crossover</a>
+                <a href="javascript:;" rel="3" name="crossoverOperator" class="default ">Uniform Crossover</a>
+                <a href="javascript:;" rel="4" name="crossoverOperator" class="default">Cycle Crossover</a>
+
+            </dd>
+        </dl>
+        <dl class="cation-list">
+            <dt>Mutation Operator</dt>
+            <dd>
+
+                <a href="javascript:;" rel="1" name="mutationOperator" class="default">Simple Mutation</a>
+                <a href="javascript:;" rel="2" name="mutationOperator" class="default">Uniform Mutation</a>
+
+
+            </dd>
+        </dl>
+        <dl class="cation-list">
+            <dt>Encoding</dt>
+            <dd>
+
+                <a href="javascript:;" rel="10" name="code" class="default ">Decimal</a>
+                <a href="javascript:;" rel="2" name="code" class="default">Binary</a>
+
+            </dd>
+        </dl>
+
+        <dl class="cation-list">
+            <dt>Population Size</dt>
+            <dd>
+                <a href="javascript:;" rel="3" name="size" class="default ">3</a>
+                <a href="javascript:;" rel="6" name="size" class="default">6 </a>
+                <a href="javascript:;" rel="9" name="size" class="default">9 </a>
+                <a href="javascript:;" rel="12" name="size" class="default">12</a>
+                <a href="javascript:;" rel="15" name="size" class="default">15</a>
+                <a href="javascript:;" rel="18" name="size" class="default">18</a>
+                <a href="javascript:;" rel="20" name="size" class="default otherOption">other</a>
+                <input type="number" class="other" value="20" >
+
+            </dd>
+        </dl>
+
+        <dl class="cation-list">
+            <dt>Stop Generation</dt>
+            <dd>
+
+                <a href="javascript:;" rel="5" name="generation" class="default ">5</a>
+                <a href="javascript:;" rel="10" name="generation" class="default">10 </a>
+                <a href="javascript:;" rel="15" name="generation" class="default">15 </a>
+                <a href="javascript:;" rel="20" name="generation" class="default">20</a>
+                <a href="javascript:;" rel="25" name="generation" class="default">25</a>
+                <a href="javascript:;" rel="30" name="generation" class="default">30</a>
+                <a href="javascript:;" rel="40" name="generation" class="default otherOption">other</a>
+                <input type="number" class="other" value="40" >
+            </dd>
+        </dl>
+
+        <dl class="cation-list">
+            <dt>Crossover Rate</dt>
+            <dd>
+
+                <a href="javascript:;" rel="0.1" name="crossover" class="default ">0.1</a>
+                <a href="javascript:;" rel="0.2" name="crossover" class="default">0.2 </a>
+                <a href="javascript:;" rel="0.3" name="crossover" class="default">0.3 </a>
+                <a href="javascript:;" rel="0.4" name="crossover" class="default">0.4</a>
+                <a href="javascript:;" rel="0.5" name="crossover" class="default">0.5</a>
+                <a href="javascript:;" rel="0.6" name="crossover" class="default">0.6</a>
+                <a href="javascript:;" rel="0.7" name="crossover" class="default">0.7</a>
+                <a href="javascript:;" rel="0.8" name="crossover" class="default">0.8</a>
+                <a href="javascript:;" rel="0.9" name="crossover" class="default">0.9</a>
+                <a href="javascript:;" rel="1" name="crossover" class="default">1</a>
+                <a href="javascript:;" rel="0.85" name="crossover" class="default otherOption">other</a>
+                <input type="number" class="other" value="0.85" >
+            </dd>
+        </dl>
+
+        <dl class="cation-list">
+            <dt>Mutation Rate</dt>
+            <dd>
+
+                <a href="javascript:;" rel="0.1" name="mutation" class="default ">0.1</a>
+                <a href="javascript:;" rel="0.2" name="mutation" class="default">0.2 </a>
+                <a href="javascript:;" rel="0.3" name="mutation" class="default">0.3 </a>
+                <a href="javascript:;" rel="0.4" name="mutation" class="default">0.4</a>
+                <a href="javascript:;" rel="0.5" name="mutation" class="default">0.5</a>
+                <a href="javascript:;" rel="0.6" name="mutation" class="default">0.6</a>
+                <a href="javascript:;" rel="0" name="mutation" class="default otherOption">other</a>
+                <input type="number" class="other" value="0" >
+            </dd>
+        </dl>
+
+        <dl class="cation-list">
+            <dt>Application Case</dt>
+            <dd>
+
+                <a href="javascript:;" rel="0" name="app" class="default">Vase Shape Design</a>
+                <a href="javascript:;" rel="1" name="app" class="default">Ceramic Plate Pattern Design</a>
+
+            </dd>
+        </dl>
+
+        <div class="start-container"><button class="start" >Start</button></div>
+
+
+    </div>
+
+    <div style="height:50px"></div>
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript">
+    $("dd a").click(function(){
+        $(this).parent("dd").find("a").removeClass("on")
+        $(this).addClass("on")
+    })
+
+    $(".start").click(function(){
+        let list=$(".on");
+        $.cookie.json = true;
+        $.cookie('igaConfig', {
+            selectionOperator:$(list).eq(0).attr("rel"),
+            crossoverOperator:$(list).eq(1).attr("rel"),
+            mutationOperator:$(list).eq(2).attr("rel"),
+            code:$(list).eq(3).attr("rel"),
+            size:$(list).eq(4).attr("rel"),
+            generation:$(list).eq(5).attr("rel"),
+            crossover:$(list).eq(6).attr("rel"),
+            mutation:$(list).eq(7).attr("rel"),
+            app:$(list).eq(8).attr("rel"),
+        });
+        if($(list).eq(8).attr("rel")==0){
+            self.location.href="/vaseDesign"
+        }else{
+            self.location.href="/dishDesign"
+        }
+
+
+    })
+
+    $(".other").change(function(){
+        let v=$(this).val();
+        $(this).parent("dd").find(".otherOption").attr("rel",v);
+    })
+
+    var param={"selectionOperator":"1",
+        "crossoverOperator":"1",
+        "mutationOperator":"1",
+        "code":"2",
+        "size":"6",
+        "generation":"10",
+        "crossover":"0.9",
+        "mutation":"0.1",
+        "app":"0"
+    }
+        if($.cookie('igaConfig')){
+            let tempParam=JSON.parse($.cookie('igaConfig'))
+            if(tempParam){
+                param=tempParam
+            }
+        }
+
+    $("[name='selectionOperator'][rel='"+param.selectionOperator+"']").addClass("on")
+    $("[name='crossoverOperator'][rel='"+param.crossoverOperator+"']").addClass("on")
+    $("[name='mutationOperator'][rel='"+param.mutationOperator+"']").addClass("on")
+    $("[name='code'][rel='"+param.code+"']").addClass("on")
+    $("[name='size'][rel='"+param.size+"']").addClass("on")
+    $("[name='generation'][rel='"+param.generation+"']").addClass("on")
+    $("[name='crossover'][rel='"+param.crossover+"']").addClass("on")
+    $("[name='mutation'][rel='"+param.mutation+"']").addClass("on")
+    $("[name='app'][rel='"+param.app+"']").addClass("on")
+</script>
+
+
+
+
+</body></html>

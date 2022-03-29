@@ -1,0 +1,400 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>交互式遗传算法</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+
+    <style>
+        .btn-next {
+            background: #479fc8;
+            border: 1px solid #479fc8;
+            color: #fff;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            line-height: 20px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .btn-group {
+            margin-top: 10px;
+            height: 40px;
+        }
+
+        .cation-right li {
+            height: 45px;
+        }
+
+        .times {
+            margin-top: 10px;
+        }
+
+        .times a {
+            justify-content: flex-start;
+            color: #Fff;
+            background: #fc8080;
+            width: 16%;
+            margin: 5px 5px;
+            outline: none;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="">
+<div class="cation-content">
+    <div style="height:50px"></div>
+    <div class="cation-flex">
+
+        <div class="cation-middle">
+
+            <div class="card-list">
+
+
+                <div class="card-individual">
+                    <div class="card-view">
+
+                    </div>
+                    <div class="card-fitness">
+                        <input type="number" class="fitness" max="10" min="0" value="5"/>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+        <div class="cation-right">
+            <div id="app">
+                <ul>
+                    <li>Selection Operator：{{ selectionOperator | selectionFilter }}</li>
+                    <li>Crossover Operator：{{ crossoverOperator | crossoverFilter}}</li>
+                    <li>Mutation Operator：{{ mutationOperator | mutationFilter}}</li>
+                    <li>Encoding：{{ code | codeFilter }}</li>
+                    <li>Population Size：{{ size }}</li>
+                    <li>Stop Generation：{{ generation }}</li>
+                    <li>Crossover Rate：{{ crossover }}</li>
+                    <li>Mutation Rate：{{ mutation }}</li>
+                </ul>
+
+            </div>
+
+            <div class="btn-group">
+                <a class="btn-next" href="/">
+                    Parameters
+                </a>
+                <a class="btn-next" id="next">
+                    Evolution
+                </a>
+
+            </div>
+
+            <div class="btn-group">
+                <a class="btn-next" id="save">
+                    Save
+                </a>
+                <a class="btn-next" href="/chart" target="_blank">
+                    chart
+                </a>
+            </div>
+
+            <div class="times">
+                <a data-index="1">1</a>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div style="height:50px"></div>
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/vue.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="module">
+    import * as THREE from '/three/build/three.module.js';
+    import {OrbitControls} from '/three/jsm/controls/OrbitControls.js';
+    import {OBJLoader} from '/three/jsm/loaders/OBJLoader.js';
+    import {MTLLoader} from '/three/jsm/loaders/MTLLoader.js';
+
+    /*<![CDATA[*/
+    var param = {
+        "selectionOperator": "1",
+        "crossoverOperator": "3",
+        "mutationOperator": "3",
+        "code": "10",
+        "size": "4",
+        "generation": "5",
+        "crossover": "0.1",
+        "mutation": "0.1"
+    }
+
+    let tempParam = JSON.parse($.cookie('igaConfig'))
+    if (tempParam) {
+        param = tempParam
+    }
+
+    var population = [];
+    var data = [];
+    var generationNum = 1;
+
+    function initPopulation() {
+        for (let i = 0; i < param.size; i++) {
+            let dish = {}
+            dish.p1 = randomNum(0, 1);
+            dish.p2 = randomNum(0, 15);
+            population.push(dish)
+        }
+        data.push(population);
+    }
+
+    initPopulation();
+
+    var finalPopulation = population;
+
+    function initCard() {
+        let text = $(".card-list").html()
+        $(".card-list").html("")
+        for (let i = 0; i < param.size; i++) {
+            $(".card-list").append(text)
+        }
+    }
+
+    initCard()
+
+
+    $("#next").click(function () {
+        nextGeneration()
+    })
+
+
+    var saveFlag = true;
+
+    $("#save").click(function () {
+        if (data.length != param.generation) {
+            alert("还未完成进化");
+            return;
+        }
+        if (!saveFlag) {
+            alert('保存成功')
+            return;
+        }
+        saveFlag = false;
+        let fitnessEL = $(".fitness");
+        for (let i = 0; i < fitnessEL.size(); i++) {
+            finalPopulation[i].fitness = $(fitnessEL[i]).val()
+        }
+        $.ajax({
+            url: "/save",
+            type: "post",
+            data: {
+                data: JSON.stringify(data),
+                configStr: JSON.stringify(param)
+            },
+            dataType: "json",
+            success: function (data) {
+                alert("保存成功");
+            }
+        });
+    })
+
+    function nextGeneration() {
+        if (generationNum >= param.generation) {
+            alert("已达到终止代数");
+            return;
+        }
+        let fitnessEL = $(".fitness");
+        for (let i = 0; i < fitnessEL.size(); i++) {
+            finalPopulation[i].fitness = $(fitnessEL[i]).val()
+        }
+
+        $.ajax({
+            url: "/dish/evolution",
+            type: "post",
+            data: {
+                populationStr: JSON.stringify(finalPopulation),
+                configStr: JSON.stringify(param)
+            },
+            dataType: "json",
+            success: function (newPopulation) {
+                population = newPopulation;
+                data.push(population);
+                finalPopulation = population;
+                $(".card-view").html('');
+                datashow()
+                generationNum++;
+                $(".times").append(" <a data-index=\"" + generationNum + "\">" + generationNum + "</a>")
+            }
+        });
+
+    }
+
+    function randomNum(minNum, maxNum) {
+        switch (arguments.length) {
+            case 1:
+                return parseInt(Math.random() * minNum + 1, 10);
+                break;
+            case 2:
+                return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+
+    var imgbodypath = '/img/body/';
+    var imgbottompath = '/img/bottom/';
+    var topMaterial,
+        bodyMaterial,
+        bottomMaterial,
+        backSideMaterial,
+        backSideMaterial,
+        backSideMaterial;
+
+
+    function datashow() {
+        for (let i = 0; i < $(".card-view").size(); i++) {
+
+            let scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf0f0f0);
+
+            let camera = new THREE.PerspectiveCamera(45, 1, 1, 2000);
+            camera.position.set(7, 9, 51);
+
+            let renderer = new THREE.WebGLRenderer();
+            renderer.setClearColor(0xffffff, 1);
+            renderer.setSize(233, 233);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            let light = new THREE.DirectionalLight(0xFFFFFF, 1.0);
+            light.position.set(1, 1, 1);
+            scene.add(light);
+
+            let materialColor = new THREE.Color();
+            materialColor.setRGB(1.0, 1.0, 1.0);
+
+
+            var objLoader = new OBJLoader()
+            objLoader.load('dish/' + population[i].p1 + '.obj', (obj) => {
+                obj.traverse((child) => {
+                    if (child instanceof THREE.Mesh) {
+                        child.material.side = THREE.DoubleSide
+                        let geometry = child.geometry
+                        geometry.center()
+                        let textureMap2 = new THREE.TextureLoader().load('dish/' + population[i].p2 + '.jpg');
+                        textureMap2.wrapS = THREE.RepeatWrapping;
+                        textureMap2.anisotropy = 16;
+                        let texturedMaterial2 = new THREE.MeshPhongMaterial({
+                            color: materialColor,
+                            map: textureMap2,
+                            side: THREE.FrontSide
+                        });
+
+                        scene.add(new THREE.Mesh(geometry, texturedMaterial2));
+                        scene.add(new THREE.HemisphereLight(0xaaaaaa, 0x444444));
+                        let controls = new OrbitControls(camera, renderer.domElement);
+                        scene.userData.controls = controls;
+                        $(".card-view").eq(i).append(renderer.domElement)
+                        let animate = function () {
+                            requestAnimationFrame(animate);
+                            controls.update();
+                            renderer.render(scene, camera);
+                        };
+
+                        animate();
+                    }
+                })
+            })
+
+
+        }
+    }
+
+    datashow();
+
+
+    function changeModel(id) {
+        var objLoader = new OBJLoader()
+
+        objLoader.load('models/' + id + '.obj?4', (obj) => {
+            obj.traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                    child.material.side = THREE.DoubleSide
+                    var geometry = child.geometry
+                    geometry.center()
+                    let textureMap2 = new THREE.TextureLoader().load('models/6.jpg');
+                    textureMap2.wrapS = textureMap.wrapT = THREE.RepeatWrapping;
+                    textureMap2.anisotropy = 16;
+                    let texturedMaterial2 = new THREE.MeshPhongMaterial({
+                        color: materialColor,
+                        map: textureMap2,
+                        side: THREE.FrontSide
+                    });
+
+                    mesh = new THREE.Mesh(geometry, texturedMaterial2);
+                    //mesh.position.set( 110, 110, 110 );
+                    scene.remove(group)
+                    group = new THREE.Group();
+                    group.add(mesh)
+                    scene.add(group)
+                }
+            })
+        })
+    }
+
+
+    Vue.filter('selectionFilter', function (value) {
+        let selectionOperatorKV = {
+            1: 'Roulette Wheel Selection',
+            2: 'Stochastic universal selection',
+            3: 'Linear Ranking Selection',
+            4: 'Tournament Selection'
+        }
+        return selectionOperatorKV[value]
+    })
+
+    Vue.filter('crossoverFilter', function (value) {
+        let crossoverOperatorKV = {
+            1: 'One-point Crossover',
+            2: 'Two-point Crossover',
+            3: 'Uniform Crossover',
+            4: 'Cycle Crossover'
+        }
+        return crossoverOperatorKV[value]
+    })
+
+    Vue.filter('mutationFilter', function (value) {
+        let mutationOperatorKV = {
+            1: 'Simple Mutation',
+            2: 'Uniform Mutation'
+        }
+        return mutationOperatorKV[value]
+    })
+
+    Vue.filter('codeFilter', function (value) {
+        let codeKV = {
+            10: 'Decimal',
+            2: 'Binary'
+        }
+        return codeKV[value]
+    })
+
+    var app = new Vue({
+        el: '#app',
+        data: param
+    })
+
+    /*]]>*/
+</script>
+
+
+</body>
+</html>
