@@ -9,7 +9,14 @@ public class IgaWebApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(IgaWebApplication.class, args);
-		System.out.println("启动成功");
+		System.out.println("φ(゜▽゜*)♪  IGAOD Started successfully ");
+		System.out.println("  _____ _____          ____  _____  \n" +
+				" |_   _/ ____|   /\\   / __ \\|  __ \\ \n" +
+				"   | || |  __   /  \\ | |  | | |  | |\n" +
+				"   | || | |_ | / /\\ \\| |  | | |  | |\n" +
+				"  _| || |__| |/ ____ \\ |__| | |__| |\n" +
+				" |_____\\_____/_/    \\_\\____/|_____/ \n" +
+				"                                    ");
 	}
 
 }

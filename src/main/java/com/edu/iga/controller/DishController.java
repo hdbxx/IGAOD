@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.edu.iga.Utils.NumberUtils;
 import com.edu.iga.genetics.*;
-import com.edu.iga.genetics.policy.*;
 import com.edu.iga.vo.ConfigVO;
 import com.edu.iga.vo.DishVO;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +18,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/dish")
-public class DishController {
+public class DishController extends BaseController{
 
     @PostMapping("/evolution")
     @ResponseBody
@@ -51,48 +50,12 @@ public class DishController {
             }
         }
 
-        Selection selection = null;
-        switch (config.getSelectionOperator()) {
-            case 1:
-                selection = new RouletteSelection();
-                break;
-            case 2:
-                selection = new StochasticUniversalSelection();
-                break;
-            case 3:
-                selection = new LinearRankingSelection();
-                break;
-            case 4:
-                selection = new TournamentSelection(3);
-                break;
-        }
+        Selection selection = getSelection(config);
 
-        Crossover crossover = null;
-        switch (config.getCrossoverOperator()) {
-            case 1:
-                crossover = new OnePointCrossover();
-                break;
-            case 2:
-                crossover = new TwoPointCrossover<>();
-                break;
-            case 3:
-                crossover = new UniformCrossover(0.5);
-                break;
-            case 4:
-                crossover = new OnePointCrossover();
-                break;
-        }
+        Crossover crossover = getCrossover(config);
 
-        Mutation mutation = null;
         List<Integer> parameterRange=new ArrayList<>(Arrays.asList(2,16));
-        switch (config.getMutationOperator()) {
-            case 1:
-                mutation = new SimpleMutation(parameterRange,config.getCode());
-                break;
-            case 2:
-                mutation = new UniformMutation(parameterRange,config.getCode(),0.1);
-                break;
-        }
+        Mutation mutation = getMutation(config,parameterRange);
 
         GeneticAlgorithm ga = new GeneticAlgorithm(selection, crossover, mutation, config.getCrossover(), config.getMutation());
         Population newPopulation = ga.evolve(new Population(chromosomes));
