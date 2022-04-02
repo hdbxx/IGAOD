@@ -3,7 +3,6 @@
     <meta charset="UTF-8">
     <title>Interactive Genetic Algorithm</title>
     <link href="css/style.css" rel="stylesheet" type="text/css">
-
     <style>
         .btn-next {
             background: #479fc8;
@@ -180,18 +179,18 @@
     })
 
 
-    var saveFlag=true;
+    var saveFlag = true;
 
     $("#save").click(function () {
-        if(data.length != param.generation){
+        if (data.length != param.generation) {
             alert("not yet evolved");
             return;
         }
-        if(!saveFlag){
+        if (!saveFlag) {
             alert('Saved successfully')
             return;
         }
-        saveFlag=false;
+        saveFlag = false;
         let fitnessEL = $(".fitness");
         for (let i = 0; i < fitnessEL.size(); i++) {
             finalPopulation[i].fitness = $(fitnessEL[i]).val()
