@@ -10,3 +10,5 @@
 5. Examples of plate pattern design
 6. The data collection
 7. Research results and analysis
+
+Documentation：https://hdbxx.github.io/IGAOD/
